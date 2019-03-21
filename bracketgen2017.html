@@ -1,0 +1,319 @@
+
+<html>
+ <head>
+  <title>GBracket Generator 2017</title>
+  <script type="application/javascript">
+
+
+
+  midwest = ['Villanova', 'Duke', 'Baylor', 'Florida', 'Virginia', 'SMU',
+             'South Carolina', 'Wisconsin', 'Virginia Tech', 'Marquette',
+             'Providence', 'UNCW', 'East Tenn St', 'New Mex St', 'Troy',
+             'MtStMarys' ];
+  east = ['UNC', 'Kentucky', 'UCLA', 'Butler', 'Minnesota', 'Cinncinati',
+          'Dayton', 'Arkansas', 'Seton Hall', 'Wichita St', 'Wake Forest',
+          'MiddleTenn', 'Winthrop', 'Kent St', 'Northern Kentucky',
+          'Texas Southern'];
+  south = ['Kansas', 'Louisville','Oregon', 'Purdue', 'Iowa St', 'Creighton',
+           'Michigan', 'Miami', 'Mich St', 'Okla St', 'Rhode Island', 'Nevada',
+           'Vermont', 'Iona', 'JacksonvilleSt', 'UC Davis'];
+  west = ['Gonzaga', 'Arizona', 'FSU', 'WVU', 'Notre Dame', 'Maryland',
+          'St Marys', 'Northwestern', 'Vanderbilt', 'VCU', 'Xavier',
+          'Princeton', 'Bucknell', 'FGCU', 'North Dakota', 'South Dakota St'];
+
+  fanboy=false;
+  midwest64Ordered=orderArray(midwest);
+  west64Ordered=orderArrayRev(west);
+  east64Ordered=orderArrayRev(east);
+  south64Ordered=orderArray(south);
+
+  midwest32=gen32(midwest64Ordered);
+  west32=gen32(west64Ordered);
+  east32=gen32(east64Ordered);
+  south32=gen32(south64Ordered);
+
+  midwest16=gen16(midwest32);
+  west16=gen16(west32);
+  east16=gen16(east32);
+  south16=gen16(south32);
+
+  midwest8=gen8(midwest16);
+  west8=gen8(west16);
+  south8=gen8(south16);
+  east8=gen8(east16);
+
+  midwestFinalist=calcWinner(midwest8[0],midwest8[1]);
+  westFinalist=calcWinner(west8[0],west8[1]);
+  southFinalist=calcWinner(south8[0],south8[1]);
+  eastFinalist=calcWinner(east8[0],east8[1]);
+
+  midwestWestFinalist=calcWinner(midwestFinalist,westFinalist);
+  southEastFinalist=calcWinner(southFinalist,eastFinalist);
+
+  tourneyChampion=calcWinner(midwestWestFinalist,southEastFinalist);
+
+
+  calcBracket();
+
+  function calcBracket(){
+
+    midwest32=gen32(midwest64Ordered);
+    west32=gen32(west64Ordered);
+    east32=gen32(east64Ordered);
+    south32=gen32(south64Ordered);
+
+    midwest16=gen16(midwest32);
+    west16=gen16(west32);
+    east16=gen16(east32);
+    south16=gen16(south32);
+
+    midwest8=gen8(midwest16);
+    west8=gen8(west16);
+    south8=gen8(south16);
+    east8=gen8(east16);
+
+    midwestFinalist=calcWinner(midwest8[0],midwest8[1]);
+    westFinalist=calcWinner(west8[0],west8[1]);
+    southFinalist=calcWinner(south8[0],south8[1]);
+    eastFinalist=calcWinner(east8[0],east8[1]);
+
+    midwestWestFinalist=calcWinner(midwestFinalist,westFinalist);
+    southEastFinalist=calcWinner(southFinalist,eastFinalist);
+
+    tourneyChampion=calcWinner(midwestWestFinalist,southEastFinalist);
+  }
+
+  function gen32(teams64){
+    outArray=[
+      calcWinner(teams64[0],teams64[1]),
+      calcWinner(teams64[2],teams64[3]),
+      calcWinner(teams64[4],teams64[5]),
+      calcWinner(teams64[6],teams64[7]),
+      calcWinner(teams64[8],teams64[9]),
+      calcWinner(teams64[10],teams64[11]),
+      calcWinner(teams64[12],teams64[13]),
+      calcWinner(teams64[14],teams64[15])
+    ];
+    return outArray;
+  }
+
+
+  function gen16(teams64){
+    outArray=[
+      calcWinner(teams64[0],teams64[1]),
+      calcWinner(teams64[2],teams64[3]),
+      calcWinner(teams64[4],teams64[5]),
+      calcWinner(teams64[6],teams64[7]),
+    ];
+    return outArray;
+  }
+
+  function gen8(teams64){
+    outArray=[
+      calcWinner(teams64[0],teams64[1]),
+      calcWinner(teams64[2],teams64[3]),
+    ];
+    return outArray;
+  }
+
+  function orderArrayRev(array){
+      outArray=[
+        array[1],
+        array[14],
+        array[6],
+        array[9],
+        array[2],
+        array[13],
+        array[5],
+        array[10],
+        array[3],
+        array[12],
+        array[4],
+        array[11],
+        array[7],
+        array[8],
+        array[0],
+        array[15]
+      ];
+
+      return outArray;
+  }
+
+  function orderArray(array){
+    outArray=[
+      array[0],
+      array[15],
+      array[7],
+      array[8],
+      array[4],
+      array[11],
+      array[3],
+      array[12],
+      array[5],
+      array[10],
+      array[2],
+      array[13],
+      array[6],
+      array[9],
+      array[1],
+      array[14]
+    ];
+    return outArray;
+  }
+
+
+  function getRankingOf(team){
+    for (var i=0;i<16;i++){
+      if (midwest[i] == team) { return i+1;}
+      if (west[i] == team) { return i+1;}
+      if (south[i] == team) {return i+1;}
+      if (east[i] == team) {return i+1;}
+    }
+    return 17;
+  }
+
+  function drawGame(x,y,color,teamA, teamB){
+    textA= getRankingOf(teamA)+". "+teamA;
+    textB= getRankingOf(teamB)+". "+teamB;
+    if (getRankingOf(teamB) < getRankingOf(teamA)){ temp=textB; textB=textA; textA=temp;}
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    context.beginPath();
+    context.rect(x,y,90,50);
+    context.lineWidth= 7;
+    context.strokeStyle= color;
+    context.stroke();
+    context.font = "8pt Arial";
+    count=0;
+    context.fillText(textA,x+5,y+20);
+    context.fillText(textB,x+5,y+40);
+  }
+
+  function drawWinner(x,y,color,teamA){
+    textA= "WINNER:";
+    textB= getRankingOf(teamA)+". "+teamA;
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    context.beginPath();
+    context.rect(x,y,90,50);
+    context.lineWidth= 7;
+    context.strokeStyle= color;
+    context.stroke();
+    context.font = "8pt Arial";
+    count=0;
+    context.fillText(textA,x+5,y+20);
+    context.fillText(textB,x+5,y+40);
+  }
+
+  function calcWinner(teamA,teamB){
+  if (fanboy){
+    if (teamA == "NC State/Xavier"){ return "NC State";}
+    if (teamB == "NC State/Xavier"){return "NC State";}
+    if (teamA == "NC State"){ return "NC State";}
+    if (teamB == "NC State"){return "NC State";}
+  }
+  rankA=17-getRankingOf(teamA);
+  rankB=17-getRankingOf(teamB);
+  if (rankA == 1){ return teamB;}
+  if (rankB == 1){ return teamA;}
+
+
+  rankA=rankA*rankA*rankA;
+  rankB=rankB*rankB*rankB;
+
+  totalRank=rankA+rankB;
+  winPercA=rankA/totalRank;
+  rand=Math.random();
+  rand = Math.floor((Math.random()*totalRank)+1);
+  if (rand < rankA){ return teamA;}
+  return teamB;
+
+  }
+
+  function drawMatch(x,y,x2,y2,left,color){
+    if (left){ x=x+90; x2=x2+90}
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    context.beginPath();
+    context.lineWidth= 7;
+    context.moveTo(x,y);
+    context.lineTo(x2,y2);
+    context.strokeStyle= color;
+    context.stroke();
+  }
+
+  function draw(fanboyMode) {
+    fanboy=fanboyMode;
+    calcBracket();
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    context.clearRect(0,0,1200,1200);
+    //round of 64
+    for(var i=0;i<8; i++){
+      maxdepth=5+75*15;
+      drawGame(5,5+75*i, 'red',midwest64Ordered[2*i],midwest64Ordered[2*i+1]);
+      if (i%2==0){ drawMatch(5,5+75*i,5,5+75*(i+1),true,'red');}
+      drawGame(5,maxdepth-75*i, 'blue',west64Ordered[2*i],west64Ordered[2*i+1]);
+      if (i%2==0){ drawMatch(5,maxdepth-75*i,5,maxdepth-75*(i+1),true,'blue');}
+      drawGame(1005,5+75*i, 'yellow',south64Ordered[2*i],south64Ordered[2*i+1]);
+      if (i%2==0){ drawMatch(1005,5+75*i,1005,5+75*(i+1),false,'yellow');}
+      drawGame(1005,maxdepth-75*i, 'green',east64Ordered[2*i],east64Ordered[2*i+1]);
+      if (i%2==0){ drawMatch(1005,maxdepth-75*i,1005,maxdepth-75*(i+1),false,'green');}
+    }
+    //round of 32
+    for (var i=0;i<4;i++){
+      yoffset=50;
+      maxdepth=yoffset+150*7
+      drawGame(105,yoffset+150*i,'red',midwest32[2*i],midwest32[2*i+1]);
+      if (i%2==0){ drawMatch(105,yoffset+150*i,105,yoffset+150*(i+1),true,'red');}
+      drawGame(105,maxdepth-150*i,'blue',west32[2*i],west32[2*i+1]);
+      if (i%2==0){ drawMatch(105,maxdepth-150*i,105,maxdepth-150*(i+1),true,'blue');}
+      drawGame(905,yoffset+150*i, 'yellow', south32[2*i], south32[2*i+1]);
+      if (i%2==0){ drawMatch(905,yoffset+150*i,905,yoffset+150*(i+1),false,'yellow');}
+      drawGame(905,maxdepth-150*i, 'green', east32[2*i], east32[2*i+1]);
+      if (i%2==0){ drawMatch(905,maxdepth-150*i,905,maxdepth-150*(i+1),false,'green');}
+    }
+    //sweet 16
+    for (var i=0;i<2;i++){
+      yoffset=125;
+      maxdepth=yoffset+300*3;
+      drawGame(205,yoffset+300*i,'red',midwest16[2*i],midwest16[2*i+1]);
+      if (i%2==0){ drawMatch(205,yoffset+300*i,205,yoffset+300*(i+1),true,'red');}
+      drawGame(205,maxdepth-300*i,'blue',west16[2*i],west16[2*i+1]);
+      if (i%2==0){ drawMatch(205,maxdepth-300*i,205,maxdepth-300*(i+1),true,'blue');}
+      drawGame(805,yoffset+300*i, 'yellow',south16[2*i],south16[2*i+1]);
+      if (i%2==0){ drawMatch(715,yoffset+300*i,715,yoffset+300*(i+1),true,'yellow');}
+      drawGame(805,maxdepth-300*i, 'green',east16[2*i],east16[2*i+1]);
+      if (i%2==0){ drawMatch(715,maxdepth-300*i,715,maxdepth-300*(i+1),true,'green');}
+    }
+    //elite 8
+    yoffset=255;
+    drawGame(305,yoffset, 'red',midwest8[0],midwest8[1]);
+    drawGame(305,yoffset+600, 'blue',west8[0],west8[1]);
+    drawGame(705,yoffset, 'yellow', south8[0],south8[1]);
+    drawGame(705,yoffset+600, 'green', east8[0],east8[1]);
+
+    //final four
+    yoffset=500;
+    drawGame(405,yoffset, 'purple',midwestFinalist,westFinalist);
+    drawGame(605,yoffset, 'orange',southFinalist,eastFinalist);
+
+    //finals
+    drawGame(505,500,'black',midwestWestFinalist,southEastFinalist);
+
+    //winner
+    drawWinner(505,425, 'red',tourneyChampion);
+  }
+  </script>
+ </head>
+ <body onload="draw(false);">
+  <center><h1>2017 NCAA Tournament Bracket Generator</h1></center>
+  <center>
+  <button onclick="draw(false);">Recalculate</button>
+  <button onclick="draw(true);">Fanboy Mode</button>
+  </center>
+  <center>
+   <canvas id="canvas" width="1100" height="1200"></canvas>
+ </center>
+ </body>
+</html>
