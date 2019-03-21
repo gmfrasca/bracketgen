@@ -6,15 +6,15 @@
 
 
 
-  midwest = ['Villanova', 'Duke', 'Baylor', 'Florida', 'Virginia', 'SMU',
+  east = ['Villanova', 'Duke', 'Baylor', 'Florida', 'Virginia', 'SMU',
              'South Carolina', 'Wisconsin', 'Virginia Tech', 'Marquette',
              'Providence', 'UNCW', 'East Tenn St', 'New Mex St', 'Troy',
              'MtStMarys' ];
-  east = ['UNC', 'Kentucky', 'UCLA', 'Butler', 'Minnesota', 'Cinncinati',
+  south = ['UNC', 'Kentucky', 'UCLA', 'Butler', 'Minnesota', 'Cinncinati',
           'Dayton', 'Arkansas', 'Seton Hall', 'Wichita St', 'Wake Forest',
           'MiddleTenn', 'Winthrop', 'Kent St', 'Northern Kentucky',
           'Texas Southern'];
-  south = ['Kansas', 'Louisville','Oregon', 'Purdue', 'Iowa St', 'Creighton',
+  midwest = ['Kansas', 'Louisville','Oregon', 'Purdue', 'Iowa St', 'Creighton',
            'Michigan', 'Miami', 'Mich St', 'Okla St', 'Rhode Island', 'Nevada',
            'Vermont', 'Iona', 'JacksonvilleSt', 'UC Davis'];
   west = ['Gonzaga', 'Arizona', 'FSU', 'WVU', 'Notre Dame', 'Maryland',
@@ -22,65 +22,65 @@
           'Princeton', 'Bucknell', 'FGCU', 'North Dakota', 'South Dakota St'];
 
   fanboy=false;
-  midwest64Ordered=orderArray(midwest);
+  east64Ordered=orderArray(east);
   west64Ordered=orderArrayRev(west);
-  east64Ordered=orderArrayRev(east);
-  south64Ordered=orderArray(south);
+  south64Ordered=orderArrayRev(south);
+  midwest64Ordered=orderArray(midwest);
 
-  midwest32=gen32(midwest64Ordered);
-  west32=gen32(west64Ordered);
   east32=gen32(east64Ordered);
+  west32=gen32(west64Ordered);
   south32=gen32(south64Ordered);
+  midwest32=gen32(midwest64Ordered);
 
-  midwest16=gen16(midwest32);
-  west16=gen16(west32);
   east16=gen16(east32);
+  west16=gen16(west32);
   south16=gen16(south32);
+  midwest16=gen16(midwest32);
 
-  midwest8=gen8(midwest16);
-  west8=gen8(west16);
-  south8=gen8(south16);
   east8=gen8(east16);
+  west8=gen8(west16);
+  midwest8=gen8(midwest16);
+  south8=gen8(south16);
 
-  midwestFinalist=calcWinner(midwest8[0],midwest8[1]);
-  westFinalist=calcWinner(west8[0],west8[1]);
-  southFinalist=calcWinner(south8[0],south8[1]);
   eastFinalist=calcWinner(east8[0],east8[1]);
+  westFinalist=calcWinner(west8[0],west8[1]);
+  midwestFinalist=calcWinner(midwest8[0],midwest8[1]);
+  southFinalist=calcWinner(south8[0],south8[1]);
 
-  midwestWestFinalist=calcWinner(midwestFinalist,westFinalist);
-  southEastFinalist=calcWinner(southFinalist,eastFinalist);
+  eastWestFinalist=calcWinner(eastFinalist,westFinalist);
+  midwestEastFinalist=calcWinner(midwestFinalist,southFinalist);
 
-  tourneyChampion=calcWinner(midwestWestFinalist,southEastFinalist);
+  tourneyChampion=calcWinner(eastWestFinalist,midwestEastFinalist);
 
 
   calcBracket();
 
   function calcBracket(){
 
-    midwest32=gen32(midwest64Ordered);
-    west32=gen32(west64Ordered);
     east32=gen32(east64Ordered);
+    west32=gen32(west64Ordered);
     south32=gen32(south64Ordered);
+    midwest32=gen32(midwest64Ordered);
 
-    midwest16=gen16(midwest32);
-    west16=gen16(west32);
     east16=gen16(east32);
+    west16=gen16(west32);
     south16=gen16(south32);
+    midwest16=gen16(midwest32);
 
-    midwest8=gen8(midwest16);
-    west8=gen8(west16);
-    south8=gen8(south16);
     east8=gen8(east16);
+    west8=gen8(west16);
+    midwest8=gen8(midwest16);
+    south8=gen8(south16);
 
-    midwestFinalist=calcWinner(midwest8[0],midwest8[1]);
-    westFinalist=calcWinner(west8[0],west8[1]);
-    southFinalist=calcWinner(south8[0],south8[1]);
     eastFinalist=calcWinner(east8[0],east8[1]);
+    westFinalist=calcWinner(west8[0],west8[1]);
+    midwestFinalist=calcWinner(midwest8[0],midwest8[1]);
+    southFinalist=calcWinner(south8[0],south8[1]);
 
-    midwestWestFinalist=calcWinner(midwestFinalist,westFinalist);
-    southEastFinalist=calcWinner(southFinalist,eastFinalist);
+    eastWestFinalist=calcWinner(eastFinalist,westFinalist);
+    midwestEastFinalist=calcWinner(midwestFinalist,southFinalist);
 
-    tourneyChampion=calcWinner(midwestWestFinalist,southEastFinalist);
+    tourneyChampion=calcWinner(eastWestFinalist,midwestEastFinalist);
   }
 
   function gen32(teams64){
@@ -164,10 +164,10 @@
 
   function getRankingOf(team){
     for (var i=0;i<16;i++){
-      if (midwest[i] == team) { return i+1;}
+      if (east[i] == team) { return i+1;}
       if (west[i] == team) { return i+1;}
+      if (midwest[i] == team) {return i+1;}
       if (south[i] == team) {return i+1;}
-      if (east[i] == team) {return i+1;}
     }
     return 17;
   }
@@ -251,55 +251,55 @@
     //round of 64
     for(var i=0;i<8; i++){
       maxdepth=5+75*15;
-      drawGame(5,5+75*i, 'red',midwest64Ordered[2*i],midwest64Ordered[2*i+1]);
+      drawGame(5,5+75*i, 'red',east64Ordered[2*i],east64Ordered[2*i+1]);
       if (i%2==0){ drawMatch(5,5+75*i,5,5+75*(i+1),true,'red');}
       drawGame(5,maxdepth-75*i, 'blue',west64Ordered[2*i],west64Ordered[2*i+1]);
       if (i%2==0){ drawMatch(5,maxdepth-75*i,5,maxdepth-75*(i+1),true,'blue');}
-      drawGame(1005,5+75*i, 'yellow',south64Ordered[2*i],south64Ordered[2*i+1]);
+      drawGame(1005,5+75*i, 'yellow',midwest64Ordered[2*i],midwest64Ordered[2*i+1]);
       if (i%2==0){ drawMatch(1005,5+75*i,1005,5+75*(i+1),false,'yellow');}
-      drawGame(1005,maxdepth-75*i, 'green',east64Ordered[2*i],east64Ordered[2*i+1]);
+      drawGame(1005,maxdepth-75*i, 'green',south64Ordered[2*i],south64Ordered[2*i+1]);
       if (i%2==0){ drawMatch(1005,maxdepth-75*i,1005,maxdepth-75*(i+1),false,'green');}
     }
     //round of 32
     for (var i=0;i<4;i++){
       yoffset=50;
       maxdepth=yoffset+150*7
-      drawGame(105,yoffset+150*i,'red',midwest32[2*i],midwest32[2*i+1]);
+      drawGame(105,yoffset+150*i,'red',east32[2*i],east32[2*i+1]);
       if (i%2==0){ drawMatch(105,yoffset+150*i,105,yoffset+150*(i+1),true,'red');}
       drawGame(105,maxdepth-150*i,'blue',west32[2*i],west32[2*i+1]);
       if (i%2==0){ drawMatch(105,maxdepth-150*i,105,maxdepth-150*(i+1),true,'blue');}
-      drawGame(905,yoffset+150*i, 'yellow', south32[2*i], south32[2*i+1]);
+      drawGame(905,yoffset+150*i, 'yellow', midwest32[2*i], midwest32[2*i+1]);
       if (i%2==0){ drawMatch(905,yoffset+150*i,905,yoffset+150*(i+1),false,'yellow');}
-      drawGame(905,maxdepth-150*i, 'green', east32[2*i], east32[2*i+1]);
+      drawGame(905,maxdepth-150*i, 'green', south32[2*i], south32[2*i+1]);
       if (i%2==0){ drawMatch(905,maxdepth-150*i,905,maxdepth-150*(i+1),false,'green');}
     }
     //sweet 16
     for (var i=0;i<2;i++){
       yoffset=125;
       maxdepth=yoffset+300*3;
-      drawGame(205,yoffset+300*i,'red',midwest16[2*i],midwest16[2*i+1]);
+      drawGame(205,yoffset+300*i,'red',east16[2*i],east16[2*i+1]);
       if (i%2==0){ drawMatch(205,yoffset+300*i,205,yoffset+300*(i+1),true,'red');}
       drawGame(205,maxdepth-300*i,'blue',west16[2*i],west16[2*i+1]);
       if (i%2==0){ drawMatch(205,maxdepth-300*i,205,maxdepth-300*(i+1),true,'blue');}
-      drawGame(805,yoffset+300*i, 'yellow',south16[2*i],south16[2*i+1]);
+      drawGame(805,yoffset+300*i, 'yellow',midwest16[2*i],midwest16[2*i+1]);
       if (i%2==0){ drawMatch(715,yoffset+300*i,715,yoffset+300*(i+1),true,'yellow');}
-      drawGame(805,maxdepth-300*i, 'green',east16[2*i],east16[2*i+1]);
+      drawGame(805,maxdepth-300*i, 'green',south16[2*i],south16[2*i+1]);
       if (i%2==0){ drawMatch(715,maxdepth-300*i,715,maxdepth-300*(i+1),true,'green');}
     }
     //elite 8
     yoffset=255;
-    drawGame(305,yoffset, 'red',midwest8[0],midwest8[1]);
+    drawGame(305,yoffset, 'red',east8[0],east8[1]);
     drawGame(305,yoffset+600, 'blue',west8[0],west8[1]);
-    drawGame(705,yoffset, 'yellow', south8[0],south8[1]);
-    drawGame(705,yoffset+600, 'green', east8[0],east8[1]);
+    drawGame(705,yoffset, 'yellow', midwest8[0],midwest8[1]);
+    drawGame(705,yoffset+600, 'green', south8[0],south8[1]);
 
     //final four
     yoffset=500;
-    drawGame(405,yoffset, 'purple',midwestFinalist,westFinalist);
-    drawGame(605,yoffset, 'orange',southFinalist,eastFinalist);
+    drawGame(405,yoffset, 'purple',eastFinalist,westFinalist);
+    drawGame(605,yoffset, 'orange',midwestFinalist,southFinalist);
 
     //finals
-    drawGame(505,500,'black',midwestWestFinalist,southEastFinalist);
+    drawGame(505,500,'black',eastWestFinalist,midwestEastFinalist);
 
     //winner
     drawWinner(505,425, 'red',tourneyChampion);
